@@ -14,5 +14,5 @@ jobs:
         with:
           fetch-depth: 1
       - name: Run Makefile
-        run: make build-all
+        run: USER_NAME=avasiliev make build-all
         working-directory: docker
