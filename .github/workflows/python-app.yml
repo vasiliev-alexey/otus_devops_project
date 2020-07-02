@@ -22,13 +22,21 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.6
-    - name: Install dependencies
+    - name: Install dependencies search_engine_crawler
       working-directory: src/search_engine_crawler
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt -r requirements-test.txt
-    - name: Test with 
+    - name: Test search_engine_crawler 
       working-directory: src/search_engine_crawler
       run: |
-        python -c "import sys; print(sys.version)"
+        python -m unittest discover -s tests/ 
+    - name: Install dependencies search_engine_ui
+      working-directory: src/search_engine_ui
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt -r requirements-test.txt
+    - name: Test search_engine_ui 
+      working-directory: src/search_engine_ui
+      run: |
         python -m unittest discover -s tests/ 
