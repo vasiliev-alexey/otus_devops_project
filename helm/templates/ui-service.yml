@@ -5,7 +5,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: ui
   ports:
