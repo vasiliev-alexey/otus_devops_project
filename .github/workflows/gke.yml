@@ -25,7 +25,7 @@ env:
   GKE_ZONE: us-central1-c  # TODO: update to cluster zone
   IMAGE: static-site
   USER_NAME: avasiliev 
-  ENGINE_IMAGE:crawler_engine
+  ENGINE_IMAGE: crawler_engine
 
 jobs:
   setup-build-publish-deploy:
