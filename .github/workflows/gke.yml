@@ -54,7 +54,7 @@ jobs:
     - name: Build
       working-directory: src/search_engine_crawler
       run: |-
-        docker build   -t "gcr.io/xxx/$ENGINE_IMAGE:$GITHUB_SHA" .
+        docker build   -t "gcr.io/${{ secrets.GKE_PROJECT }}/$ENGINE_IMAGE:$GITHUB_SHA" .
 
 
     # Push the Docker image to Google Container Registry
