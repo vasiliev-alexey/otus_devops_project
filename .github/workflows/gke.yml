@@ -54,7 +54,7 @@ jobs:
     - name: Build
       run: |-
         docker build \
-          --tag "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_REF" 
+          --tag "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_SHA" 
 
           .
         working-directory: src/search_engine_crawler
@@ -62,7 +62,7 @@ jobs:
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_REF"
+        docker push "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_SHA"
 
  
  
