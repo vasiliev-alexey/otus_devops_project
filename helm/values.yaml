@@ -1,0 +1,39 @@
+---
+ui:
+  service:
+    externalPort: 8000
+    targetPort: 8000
+    name: ui-service
+  deployment:
+    image: avasiliev/crawler_ui:latest
+    name: ui
+  ingress:
+    host: ui.avasiliev.com
+
+crawler:
+  service:
+    externalPort: 8000
+    targetPort: 8000
+    name: crawler-service
+  deployment:
+    image: avasiliev/crawler_engine:latest
+    name: crawler
+    url: https://vitkhab.github.io/search_engine_test_site
+  ingress:
+
+mongo:
+  service:
+    name: mongo-service
+    port: 27017
+  deployment:
+    name: mongo
+    image: mongo:4.0.18
+
+rabbit:
+  service:
+    name: rabbit-service
+    port1: 5672
+    port2: 15672
+  deployment:
+    name: rabbitmq
+    image: rabbitmq:3
