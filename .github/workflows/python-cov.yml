@@ -5,6 +5,8 @@ name: Оценка покрытия тестами
 
 on:
   push:
+    paths:
+     - 'src/**'
     branches: [ master ]
   pull_request:
     branches: [ master ]
