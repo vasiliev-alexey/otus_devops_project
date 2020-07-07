@@ -5,7 +5,7 @@ metadata:
   labels:
     release: "1"
 spec:
-  type: ClusterIP
+  type: Loadbalancer
   selector:
     app: ui
   ports:
