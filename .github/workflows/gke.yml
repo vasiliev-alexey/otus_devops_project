@@ -26,6 +26,7 @@ env:
   IMAGE: static-site
   USER_NAME: avasiliev 
   ENGINE_IMAGE: crawler_engine
+  UI_IMAGE: crawler_ui
 
 jobs:
   setup-build-publish-deploy:
@@ -50,17 +51,22 @@ jobs:
 
 
 
-    # Build the Docker image
+    # Build the Docker image search_engine_crawler
     - name: Build
       working-directory: src/search_engine_crawler
       run: |-
         docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA" .
+
+    - name: Build crawler_ui
+      working-directory: src/search_engine_ui
+      run: |-
+        docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA" .
 
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
         docker push "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_SHA"
-
+        docker push "gcr.io/$PROJECT_ID/$UI_IMAGE:$GITHUB_SHA"
  
  
