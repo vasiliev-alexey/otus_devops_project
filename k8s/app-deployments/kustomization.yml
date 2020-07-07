@@ -11,15 +11,9 @@ resources:
 - ui-service.yml
 - ui-ingress.yml
 images:
-- digest: sha256:a4cf541aa82246febce3786d3de4a361455570712ac1a5449fc6cd9122ce1a6f
-  name: crawler_image
-  newName: gcr.io/inbound-coast-275214/crawler_engine
 - name: mongo_image
   newName: mongo
   newTag: 4.0.18
 - name: rabbit_image
   newName: rabbitmq
   newTag: "3"
-- digest: sha256:b4d543d21ffb5e1701d24cc05528f462274fc51ed1e7032b0fa49a56ec3efa59
-  name: ui_image
-  newName: gcr.io/inbound-coast-275214/crawler_ui
