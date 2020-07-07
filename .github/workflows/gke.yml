@@ -21,8 +21,8 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1   # TODO: update to cluster name
-  GKE_ZONE: us-central1-c  # TODO: update to cluster zone
+  GKE_CLUSTER: av-k8s-cluster   # TODO: update to cluster name
+  GKE_ZONE: europe-west1-b # TODO: update to cluster zone
   IMAGE: static-site
   USER_NAME: avasiliev 
   ENGINE_IMAGE: crawler_engine
