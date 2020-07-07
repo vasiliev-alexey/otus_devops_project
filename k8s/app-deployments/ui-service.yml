@@ -1,0 +1,26 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-service
+  labels:
+    release: "1"
+spec:
+  type: ClusterIP
+  selector:
+    app: ui
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-service
+  namespace: monitoring
+  labels:
+    release: "1"
+spec:
+  type: ExternalName
+  externalName: ui-service.application-namespace.svc.cluster.local
+  ports:
+  - port: 8000

@@ -2,4 +2,6 @@ DevOps_Project-5522-fee0c6.pdf
 notes.md
 docker/.env
 *.terraform/
-*.tfstate
+*/*.tfstate
+*/*.backup
+infra/terraform/terraform.tfstate

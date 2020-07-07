@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler-deployment
+  labels:
+    app: crawler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crawler
+  template:
+    metadata:
+      labels:
+        app: crawler
+    spec:
+      containers:
+      - name: crawler
+        image: crawler_image
+        env:
+        - name: MONGO
+          value: "mongo-service"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: RMQ_HOST
+          value: "rabbit-service"
+        - name: RMQ_USERNAME
+          value: "guest"
+        - name: RMQ_PASSWORD
+          value: "guest"
+        - name: CHECK_INTERVAL
+          value: "10"
+        - name: EXCLUDE_URLS
+          value: ".*github.com"
+        args: [ "https://vitkhab.github.io/search_engine_test_site"]
+        ports:
+        - containerPort: 8000

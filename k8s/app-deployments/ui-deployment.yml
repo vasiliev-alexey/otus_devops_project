@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-deployment
+  labels:
+    app: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: ui_image
+        env:
+        - name: MONGO
+          value: "mongo-service"
+        - name: MONGO_PORT
+          value: "27017"
+        ports:
+        - containerPort: 8000
