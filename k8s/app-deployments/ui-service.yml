@@ -5,7 +5,7 @@ metadata:
   labels:
     release: "1"
 spec:
-  type: Loadbalancer
+  type: LoadBalancer
   selector:
     app: ui
   ports:
