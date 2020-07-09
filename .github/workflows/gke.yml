@@ -88,6 +88,6 @@ jobs:
       run: |-
         ./kustomize edit set image ui_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA
         ./kustomize edit set image crawler_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA
-        ./kustomize build . | kubectl apply -f -
+        ./kustomize build . | kubectl apply -n application-namespace -f -
         kubectl get services -o wide
  
