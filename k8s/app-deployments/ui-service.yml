@@ -21,6 +21,6 @@ metadata:
     release: "1"
 spec:
   type: ExternalName
-  externalName: ui-service.application-namespace.svc.cluster.local
+  externalName: ui-service.application.svc.cluster.local
   ports:
   - port: 8000

@@ -63,7 +63,8 @@ resource "google_container_node_pool" "av-k8s-nodes" {
 resource "helm_release" "nginx" {
   name       = "nginx"
   chart      = "../helm/nginx"
-
+  namespace = "nginx-ingress"
+  create_namespace = true
   depends_on = [
    google_container_node_pool.av-k8s-nodes
   ]
