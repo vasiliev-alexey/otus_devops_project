@@ -23,7 +23,6 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: av-k8s-cluster   # TODO: update to cluster name
   GKE_ZONE: europe-west1-b # TODO: update to cluster zone
-  IMAGE: static-site
   USER_NAME: avasiliev 
   ENGINE_IMAGE: crawler_engine
   UI_IMAGE: crawler_ui
@@ -46,13 +45,14 @@ jobs:
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
-    - run: |-
+    - name: Configure Docker to use the gcloud command-line tool
+      run: |-
         gcloud --quiet auth configure-docker
 
 
 
     # Build the Docker image search_engine_crawler
-    - name: Build
+    - name: Build engine crawler
       working-directory: src/search_engine_crawler
       run: |-
         docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA" .
@@ -70,7 +70,8 @@ jobs:
         docker push "gcr.io/$PROJECT_ID/$UI_IMAGE:$GITHUB_SHA"
 
     # Get the GKE credentials so we can deploy to the cluster
-    - run: |-
+    - name: Set up GKE credentials
+      run: |-
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
 
@@ -82,11 +83,11 @@ jobs:
         chmod u+x ./kustomize
 
      # Deploy the Docker image to the GKE cluster
-    - name: Deploy
+    - name: Deploy to GKE
       working-directory: k8s/app-deployments
       run: |-
         ./kustomize edit set image ui_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA
         ./kustomize edit set image crawler_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA
-        ./kustomize build . | kubectl apply -f -
+        ./kustomize build . | kubectl apply -n application-namespace -f -
         kubectl get services -o wide
  
