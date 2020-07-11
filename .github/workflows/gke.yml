@@ -85,12 +85,23 @@ jobs:
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
 
+
+
+
+
      # Deploy the Docker image to the GKE cluster
-    - name: Deploy to GKE
+    - name: Deploy to GKE  (application)
       working-directory: k8s/app-deployments
       run: |-
         ./kustomize edit set image ui_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA
         ./kustomize edit set image crawler_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA
         ./kustomize build . | kubectl apply -n application -f -
-        kubectl get services -o wide
+        kubectl get services -o wide -n application
  
+     # Deploy the Docker image to the GKE cluster
+    - name: Deploy to GKE (monitoring services)
+      working-directory: k8s/monitoring-deployments
+      run: |-
+        ./kustomize build . | kubectl apply -n monitoring -f -
+        kubectl get services -o wide
+        kubectl get services -o wide -n monitoring 
