@@ -17,4 +17,4 @@ images:
   newTag: 4.0.18
 - name: rabbit_image
   newName: rabbitmq
-  newTag: "3"
+  newTag: "management"

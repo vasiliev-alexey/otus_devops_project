@@ -4,3 +4,4 @@ resources:
 - crawler-monitoring-service.yml
 - ui-monitoring-service.yml
 - monitoring-ns.yml
+- rabbit-monitoring-service.yaml

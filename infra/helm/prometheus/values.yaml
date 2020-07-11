@@ -30,7 +30,7 @@ serviceAccounts:
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## Use a ClusterRole (and ClusterRoleBinding)
   ## - If set to false, we define a Role and RoleBinding in the defined namespaces ONLY
@@ -683,7 +683,7 @@ server:
   ingress:
     ## If true, Prometheus server Ingress will be created
     ##
-    enabled: false
+    enabled: true
 
     ## Prometheus server Ingress annotations
     ##
@@ -698,8 +698,8 @@ server:
     ## Prometheus server Ingress hostnames with optional path
     ## Must be provided if Ingress is enabled
     ##
-    hosts: []
-    #   - prometheus.domain.com
+    hosts: 
+      - prometheus.avasiliev.com
     #   - domain.com/prometheus
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
@@ -946,7 +946,7 @@ server:
 pushgateway:
   ## If false, pushgateway will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -992,6 +992,7 @@ pushgateway:
     ## Must be provided if Ingress is enabled
     ##
     hosts: []
+ 
     #   - pushgateway.domain.com
     #   - domain.com/pushgateway
 
@@ -1204,13 +1205,18 @@ serverFiles:
       - job_name: 'ui'
         static_configs:
           - targets:
-            - 'ui-service.application-namespace.svc.cluster.local:8000'
+            - 'ui-service.application.svc.cluster.local:8000'
 
 
       - job_name: 'engine'
         static_configs:
           - targets:
-            - 'crawler-service.application-namespace.svc.cluster.local:8000'
+            - 'crawler-service.application.svc.cluster.local:8000'
+
+      - job_name: 'rabbitmq'
+        static_configs:
+          - targets:
+            - 'rabbitmq-exporter-prometheus-rabbitmq-exporter:9419'
 
       # A scrape configuration for running Prometheus on a Kubernetes cluster.
       # This uses separate scrape configs for cluster components (i.e. API server, node)

@@ -90,7 +90,20 @@ resource "helm_release" "grafana" {
   chart      = "../helm/grafana"
   namespace = "monitoring"
   depends_on = [
-   helm_release.prometheus
+   google_container_node_pool.av-k8s-nodes
   ]
 
+}
+
+resource "helm_release" "rabbitmq-exporter" {
+  name       = "rabbitmq-exporter"
+  chart = "stable/prometheus-rabbitmq-exporter"
+  namespace = "monitoring"
+  version = "0.5.5"
+  depends_on = [
+   google_container_node_pool.av-k8s-nodes
+  ]
+  values = [
+    "${file("../helm/prometheus-rabbitmq-exporter/values.yaml")}"
+  ]
 }
