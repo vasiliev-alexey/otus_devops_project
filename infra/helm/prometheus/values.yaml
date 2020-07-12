@@ -1217,6 +1217,11 @@ serverFiles:
         static_configs:
           - targets:
             - 'rabbitmq-exporter-prometheus-rabbitmq-exporter:9419'
+ 
+      - job_name: 'mongodb'
+        static_configs:
+          - targets:
+            - 'mongodb-exporter-prometheus-mongodb-exporter:9216'
 
       # A scrape configuration for running Prometheus on a Kubernetes cluster.
       # This uses separate scrape configs for cluster components (i.e. API server, node)

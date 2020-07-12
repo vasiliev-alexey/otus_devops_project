@@ -89,6 +89,7 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   chart      = "../helm/grafana"
   namespace = "monitoring"
+  create_namespace = true
   depends_on = [
    google_container_node_pool.av-k8s-nodes
   ]
@@ -99,6 +100,7 @@ resource "helm_release" "rabbitmq-exporter" {
   name       = "rabbitmq-exporter"
   chart = "stable/prometheus-rabbitmq-exporter"
   namespace = "monitoring"
+  create_namespace = true
   version = "0.5.5"
   depends_on = [
    google_container_node_pool.av-k8s-nodes
@@ -107,3 +109,17 @@ resource "helm_release" "rabbitmq-exporter" {
     "${file("../helm/prometheus-rabbitmq-exporter/values.yaml")}"
   ]
 }
+
+resource "helm_release" "mongodb-exporter" {
+  name       = "mongodb-exporter"
+  chart = "stable/prometheus-mongodb-exporter"
+  namespace = "monitoring"
+  create_namespace = true
+  depends_on = [
+   helm_release.prometheus
+  ]
+  values = [
+    "${file("../helm/prometheus-mongodb-exporter/values.yaml")}"
+  ]
+}
+
