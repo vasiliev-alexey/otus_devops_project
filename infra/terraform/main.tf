@@ -2,15 +2,18 @@ terraform {
   required_version = ">= 0.12.26"
 }
 
+provider "helm" {
+  version = "~> 1.00"
+
+}
+
 provider "google" {
   version = "~> 3.15.0"
   project = var.project_name
   region  = var.region_name
 }
 
-provider "helm" {
-  version = "~> 0.10"
-}
+ 
 
 resource "google_container_cluster" "av-k8s-cluster" {
   name     = "av-k8s-cluster"
@@ -27,6 +30,11 @@ resource "google_container_cluster" "av-k8s-cluster" {
       issue_client_certificate = false
     }
   }
+
+ provisioner "local-exec" {
+    command = "gcloud container clusters get-credentials av-k8s-cluster --zone europe-west1-b --project inbound-coast-275214"
+  }
+
 }
 
 resource "google_container_node_pool" "av-k8s-nodes" {
@@ -49,5 +57,69 @@ resource "google_container_node_pool" "av-k8s-nodes" {
       "https://www.googleapis.com/auth/monitoring",
     ]
   }
+}
+
+
+resource "helm_release" "nginx" {
+  name       = "nginx"
+  chart      = "../helm/nginx"
+  namespace = "nginx-ingress"
+  create_namespace = true
+  depends_on = [
+   google_container_node_pool.av-k8s-nodes
+  ]
+
+}
+
+
+resource "helm_release" "prometheus" {
+  name       = "prometheus"
+  chart      = "../helm/prometheus"
+  namespace = "monitoring"
+  create_namespace = true
+
+  depends_on = [
+   google_container_node_pool.av-k8s-nodes
+  ]
+
+}
+
+
+resource "helm_release" "grafana" {
+  name       = "grafana"
+  chart      = "../helm/grafana"
+  namespace = "monitoring"
+  create_namespace = true
+  depends_on = [
+   google_container_node_pool.av-k8s-nodes
+  ]
+
+}
+
+resource "helm_release" "rabbitmq-exporter" {
+  name       = "rabbitmq-exporter"
+  chart = "stable/prometheus-rabbitmq-exporter"
+  namespace = "monitoring"
+  create_namespace = true
+  version = "0.5.5"
+  depends_on = [
+   google_container_node_pool.av-k8s-nodes
+  ]
+  values = [
+    "${file("../helm/prometheus-rabbitmq-exporter/values.yaml")}"
+  ]
+}
+
+resource "helm_release" "mongodb-exporter" {
+  name       = "mongodb-exporter"
+  chart = "stable/prometheus-mongodb-exporter"
+  namespace = "monitoring"
+  create_namespace = true
+  depends_on = [
+   helm_release.prometheus
+  ]
+  values = [
+    "${file("../helm/prometheus-mongodb-exporter/values.yaml")}"
+  ]
 }
 

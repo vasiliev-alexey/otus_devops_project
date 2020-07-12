@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbit-service
+  namespace: monitoring
+spec:
+  type: ExternalName
+  externalName: rabbit-service.application.svc.cluster.local
+  ports:
+  - port: 5672
+    name: main
+  - port: 15672
+    name: metic
+

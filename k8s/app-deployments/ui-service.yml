@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-service
+  labels:
+    release: "1"
+spec:
+  type: ClusterIP
+  selector:
+    app: ui
+  ports:
+  - port: 8000
+    targetPort: 8000

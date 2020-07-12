@@ -1,0 +1,107 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+    - test_gke_deployment
+    paths:
+    - 'src/**'
+
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: av-k8s-cluster   # TODO: update to cluster name
+  GKE_ZONE: europe-west1-b # TODO: update to cluster zone
+  USER_NAME: avasiliev 
+  ENGINE_IMAGE: crawler_engine
+  UI_IMAGE: crawler_ui
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - name: Configure Docker to use the gcloud command-line tool
+      run: |-
+        gcloud --quiet auth configure-docker
+
+
+
+    # Build the Docker image search_engine_crawler
+    - name: Build engine crawler
+      working-directory: src/search_engine_crawler
+      run: |-
+        docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA" .
+
+    - name: Build crawler_ui
+      working-directory: src/search_engine_ui
+      run: |-
+        docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA" .
+
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$UI_IMAGE:$GITHUB_SHA"
+
+    # Get the GKE credentials so we can deploy to the cluster
+    - name: Set up GKE credentials
+      run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+
+    # Set up kustomize
+    - name: Set up Kustomize
+      working-directory: k8s/app-deployments
+      run: |-
+        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
+        cp kustomize ../monitoring-deployments
+
+
+
+
+     # Deploy the Docker image to the GKE cluster
+    - name: Deploy to GKE  (application)
+      working-directory: k8s/app-deployments
+      run: |-
+        ./kustomize edit set image ui_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA
+        ./kustomize edit set image crawler_image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$ENGINE_IMAGE:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -n application -f -
+        kubectl get services -o wide -n application
+ 
+     # Deploy the Docker image to the GKE cluster
+    - name: Deploy to GKE (monitoring services)
+      working-directory: k8s/monitoring-deployments
+      run: |-
+        ./kustomize build . | kubectl apply -n monitoring -f -
+        kubectl get services -o wide
+        kubectl get services -o wide -n monitoring 

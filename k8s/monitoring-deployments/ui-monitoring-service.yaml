@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-service
+  namespace: monitoring
+  labels:
+    release: "1"
+spec:
+  type: ExternalName
+  externalName: ui-service.application.svc.cluster.local
+  ports:
+  - port: 8000

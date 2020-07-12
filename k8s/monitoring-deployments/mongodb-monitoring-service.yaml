@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongod-service
+  namespace: monitoring
+spec:
+  type: ExternalName
+  externalName: mongo-service.application.svc.cluster.local
+  ports:
+  - port: 27017
+
+
