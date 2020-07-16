@@ -25,6 +25,12 @@ services:
     image: ${USER_NAME}/crawler_ui:${CRAWLER_UI_VERSION}
     ports:
       - 8000:8000/tcp
+
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: ui
     environment:
       - MONGO=crawlerdb
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
@@ -39,6 +45,11 @@ services:
 
   engine:
     image: ${USER_NAME}/crawler_engine:${CRAWLER_ENGINE_VERSION}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: engine
     environment:
       - MONGO=crawlerdb
       - RMQ_HOST=crawlermq
