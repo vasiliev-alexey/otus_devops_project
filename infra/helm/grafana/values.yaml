@@ -318,6 +318,12 @@ datasources:
       url: http://prometheus-server
       access: proxy
       isDefault: true
+    - name: Loki
+      type: loki
+      url: http://loki:3100
+      access: proxy
+      isDefault: false
+      
 
 ## Configure notifiers
 ## ref: http://docs.grafana.org/administration/provisioning/#alert-notification-channels
@@ -407,7 +413,7 @@ dashboards:
       gnetId: 9614
       datasource: Prometheus
     kubernetes-cluster-monitoring-prometheus:
-      gnetId: 1621
+      gnetId: 315
       datasource: Prometheus
  
   rabbit:
