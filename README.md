@@ -42,7 +42,7 @@
                  - [x] Пример рабочего флоу
          - [ ] How to start?
              - [ ] CI/CD Environment Variables
-     - [x] (CHANGELOG)./[docs/Журнал работ.md] с описанием выполненной работы 
+     - [x] (CHANGELOG)[docs/Журнал работ.md] с описанием выполненной работы 
      
      
      [Скринкаст MVP](https://yadi.sk/i/Wf_fMx75aqyz7A)
