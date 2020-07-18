@@ -73,3 +73,19 @@ resource "helm_release" "loki" {
   create_namespace = true
 depends_on =   [var.vm_depends_on]
 }
+
+resource "helm_release" "loki-fluent-bit" {
+  name       = "fluent-bit"
+  chart      = "fluent-bit"
+  repository = "https://grafana.github.io/loki/charts" 
+  namespace = "monitoring"
+  create_namespace = true
+depends_on =   [var.vm_depends_on]
+
+  set {
+    name  = "loki.serviceName"
+    value = "loki.monitoring.svc.cluster.local"
+  }
+
+
+}
