@@ -1,5 +1,17 @@
 DevOps_Project-5522-fee0c6.pdf
 notes.md
 docker/.env
+.vscode
 *.terraform/
 *.tfstate
+*.backup
+infra/**.tfstate
+*.tfstate.lock.info
+infra/terraform/terraform.tfstate.backup
+
+infra/terraform/terraform.tfstate.backup
+
+
+#infra/minikube
+План_demo.md
+

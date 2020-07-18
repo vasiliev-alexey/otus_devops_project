@@ -1,7 +1,7 @@
-name: cravler-app
+name: cravler
 version: 1.0.0
-description: awesome final
+description: 
 maintainers:
-  - name: Dmitriy Mamontov
-    email: d.s.mamontov@ya.ru
+  - name: vasiliev-alexey
+    email: vasiliev-alexey@nomail.com
 appVersion: 1.0

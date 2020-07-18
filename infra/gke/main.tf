@@ -2,15 +2,27 @@ terraform {
   required_version = ">= 0.12.26"
 }
 
+provider "helm" {
+  version = "~> 1.00"
+
+}
+
 provider "google" {
   version = "~> 3.15.0"
   project = var.project_name
   region  = var.region_name
 }
 
-provider "helm" {
-  version = "~> 0.10"
+
+ 
+
+
+ 
+module "monitoring_infra" {
+source = "../monitoring_module"
+vm_depends_on =  "${google_container_node_pool.av-k8s-nodes.location}"
 }
+
 
 resource "google_container_cluster" "av-k8s-cluster" {
   name     = "av-k8s-cluster"
@@ -27,6 +39,11 @@ resource "google_container_cluster" "av-k8s-cluster" {
       issue_client_certificate = false
     }
   }
+
+ provisioner "local-exec" {
+    command = "gcloud container clusters get-credentials av-k8s-cluster --zone europe-west1-b --project inbound-coast-275214"
+  }
+
 }
 
 resource "google_container_node_pool" "av-k8s-nodes" {
@@ -50,4 +67,3 @@ resource "google_container_node_pool" "av-k8s-nodes" {
     ]
   }
 }
-

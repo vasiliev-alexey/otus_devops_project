@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: crawler-service
+  namespace: monitoring
+  labels:
+    release: "1"
+spec:
+  type: ExternalName
+  externalName: crawler-service.application.svc.cluster.local
+  ports:
+  - port: 8000

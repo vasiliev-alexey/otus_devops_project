@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbit-service
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbitmq
+  ports:
+  - name: port1
+    port: 5672
+    targetPort: 5672
+  - name: port2
+    port: 15672
+    targetPort: 15672
