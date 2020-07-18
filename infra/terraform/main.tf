@@ -13,7 +13,16 @@ provider "google" {
   region  = var.region_name
 }
 
+
  
+
+
+ 
+module "monitoring_infra" {
+source = "../monitoring_module"
+vm_depends_on =  "${google_container_node_pool.av-k8s-nodes.location}"
+}
+
 
 resource "google_container_cluster" "av-k8s-cluster" {
   name     = "av-k8s-cluster"
@@ -58,68 +67,3 @@ resource "google_container_node_pool" "av-k8s-nodes" {
     ]
   }
 }
-
-
-resource "helm_release" "nginx" {
-  name       = "nginx"
-  chart      = "../helm/nginx"
-  namespace = "nginx-ingress"
-  create_namespace = true
-  depends_on = [
-   google_container_node_pool.av-k8s-nodes
-  ]
-
-}
-
-
-resource "helm_release" "prometheus" {
-  name       = "prometheus"
-  chart      = "../helm/prometheus"
-  namespace = "monitoring"
-  create_namespace = true
-
-  depends_on = [
-   google_container_node_pool.av-k8s-nodes
-  ]
-
-}
-
-
-resource "helm_release" "grafana" {
-  name       = "grafana"
-  chart      = "../helm/grafana"
-  namespace = "monitoring"
-  create_namespace = true
-  depends_on = [
-   google_container_node_pool.av-k8s-nodes
-  ]
-
-}
-
-resource "helm_release" "rabbitmq-exporter" {
-  name       = "rabbitmq-exporter"
-  chart = "stable/prometheus-rabbitmq-exporter"
-  namespace = "monitoring"
-  create_namespace = true
-  version = "0.5.5"
-  depends_on = [
-   google_container_node_pool.av-k8s-nodes
-  ]
-  values = [
-    "${file("../helm/prometheus-rabbitmq-exporter/values.yaml")}"
-  ]
-}
-
-resource "helm_release" "mongodb-exporter" {
-  name       = "mongodb-exporter"
-  chart = "stable/prometheus-mongodb-exporter"
-  namespace = "monitoring"
-  create_namespace = true
-  depends_on = [
-   helm_release.prometheus
-  ]
-  values = [
-    "${file("../helm/prometheus-mongodb-exporter/values.yaml")}"
-  ]
-}
-
