@@ -15,14 +15,15 @@ jobs:
       continue-on-error: true
 
     - name: Set env
-      if: ${{ success() }}
+      if: ${{ !success() }}
       run: 
           echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }} ' смотри логи' 
 
     - name: Set env failure
-      if: ${{ failure() }}
+      if: ${{ !failure() }}
       run: 
           echo ::set-env name=STEPVAR::'Сборка НЕ завершена '${{ job.status }} ' смотри логи' 
+
 
      
     - name: Slack Notification
