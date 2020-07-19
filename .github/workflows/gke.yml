@@ -68,7 +68,7 @@ jobs:
     - name: Set env
       if: ${{ success() }}
       run: 
-          echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }} '  
+          echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }}   
 
     - name: Set env failure
       if: ${{ failure() }}
