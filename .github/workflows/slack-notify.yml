@@ -1,5 +1,5 @@
 on: push
-    branches: [ test_notif ]
+  branches: [ test_notif ]
 name: Slack Notification Demo
 jobs:
   slackNotification:
