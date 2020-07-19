@@ -10,8 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set env
+      if: ${{ success() }}
       run: echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }} ' смотри логи' 
- 
+      else
+      run: echo ::set-env name=STEPVAR::'Сборка завершена c ошибками '${{ job.status }} ' смотри логи' 
+      fi
+
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@master
       env:
