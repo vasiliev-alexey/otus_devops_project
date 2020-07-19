@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Set env
+      run: echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }} ' смотри логи' 
+ 
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@master
       env:
@@ -16,6 +19,6 @@ jobs:
         SLACK_USERNAME: "Бот сборочного конвеера" 
         SLACK_TITLE: "Сборка завершена" 
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: 'Сборка завершена {0} '  ${{ job.status }} 'смотри логи' 
+        SLACK_MESSAGE: $STEPVAR
  #       SLACK_MESSAGE: format('Hello {0} {1} {2}', 'Mona', 'the', 'Octocat')
         SLACK_FOOTER: "OTUS GHA BOT"
