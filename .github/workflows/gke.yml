@@ -100,6 +100,19 @@ jobs:
     needs:  ["setup-build-publish"]
 
     steps: 
+    # Setup gcloud CLI
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - name: Configure Docker to use the gcloud command-line tool
+      run: |-
+        gcloud --quiet auth configure-docker
+
     # Get the GKE credentials so we can deploy to the cluster
     - name: Set up GKE credentials
       run: |-
