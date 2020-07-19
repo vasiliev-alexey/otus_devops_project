@@ -1,5 +1,7 @@
-on: push
-  branches: [ test_notif ]
+
+on:
+  push:
+    branches: [ test_notif ]
 name: Slack Notification Demo
 jobs:
   slackNotification:
