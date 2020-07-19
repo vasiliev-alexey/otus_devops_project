@@ -33,12 +33,12 @@
          - [x] визуализация (Grafana)
      - [x] Логирование (Fluentd + Loki + Grafana)
      - [ ] Трейсинг (опционально)
-     - [ ] ChatOps (опционально)
+     - [x] ChatOps (GitHub Actions + Slack)
  - [ ] Документация
      - [ ] README по работе с репозиторием
          - [ ] Описание приложения и его архитектуры
-         - [ ] CI/CD
-             - [ ] Pipeline
+         - [x] CI/CD
+             - [x] Pipeline
                  - [x] Пример рабочего флоу
          - [ ] How to start?
              - [ ] CI/CD Environment Variables
