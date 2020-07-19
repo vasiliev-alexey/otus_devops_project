@@ -15,3 +15,5 @@ jobs:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: "Бот сборочного конвеера" 
         SLACK_TITLE: "Сборка завершена" 
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "Сборка завершена - смотри логи" 
