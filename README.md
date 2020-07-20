@@ -39,7 +39,7 @@
          - [ ] Описание приложения и его архитектуры
          - [x] CI/CD
              - [x] Pipeline
-                 - [x] Пример рабочего флоу
+                 - [x] [Пример рабочего флоу](.github/workflows/gke.yml)
          - [ ] How to start?
              - [ ] CI/CD Environment Variables
      - [x] (CHANGELOG)[docs/Журнал работ.md] с описанием выполненной работы 
