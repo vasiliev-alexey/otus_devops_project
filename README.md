@@ -33,13 +33,13 @@
          - [x] визуализация (Grafana)
      - [x] Логирование (Fluentd + Loki + Grafana)
      - [ ] Трейсинг (опционально)
-     - [ ] ChatOps (опционально)
+     - [x] ChatOps (GitHub Actions + Slack)
  - [ ] Документация
      - [ ] README по работе с репозиторием
          - [ ] Описание приложения и его архитектуры
-         - [ ] CI/CD
-             - [ ] Pipeline
-                 - [x] Пример рабочего флоу
+         - [x] CI/CD
+             - [x] Pipeline
+                 - [x] [Пример рабочего флоу](.github/workflows/gke.yml)
          - [ ] How to start?
              - [ ] CI/CD Environment Variables
      - [x]  [CHANGELOG](./docs/Журнал работ.md) с описанием выполненной работы 

@@ -47,7 +47,9 @@
 Модуль переиспользован в Terraform  сценариях для Minikube и GKE
 Добавлено централизованое логирование через Fluend + Loki + Grafana -  правда пока без структурирования логов
 
+18.07
+Добавлен ChatOps  в GitHub Actions
+
 
 TODO
-Добавить ChatOps  в GitHub Actions
 Создать докуммент как запустить проект
