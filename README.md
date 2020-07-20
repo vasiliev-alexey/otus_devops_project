@@ -42,8 +42,4 @@
                  - [x] [Пример рабочего флоу](.github/workflows/gke.yml)
          - [ ] How to start?
              - [ ] CI/CD Environment Variables
-     - [x] (CHANGELOG)[docs/Журнал работ.md] с описанием выполненной работы 
-     
-     
-     [Скринкаст MVP](https://yadi.sk/i/Wf_fMx75aqyz7A)
-     
+     - [x]  [CHANGELOG](./docs/Журнал работ.md) с описанием выполненной работы 

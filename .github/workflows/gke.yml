@@ -31,8 +31,8 @@ env:
   UI_IMAGE: crawler_ui
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+  setup-build-publish:
+    name: Setup, Build
     runs-on: ubuntu-latest
 
     steps:
@@ -65,19 +65,61 @@ jobs:
       run: |-
         docker build   -t "gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/$UI_IMAGE:$GITHUB_SHA" .
 
+    - name: Set env
+      if: ${{ success() }}
+      run: 
+          echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }}   
+
+    - name: Set env failure
+      if: ${{ failure() }}
+      run: 
+          echo ::set-env name=STEPVAR::'Сборка НЕ завершена '${{ job.status }} ' смотри логи' 
+
+    - name: Slack Notification Build
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_USERNAME: "Бот сборочного конвеера" 
+        SLACK_TITLE: "Сборка завершена" 
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: ${{ env.STEPVAR }} 
+        SLACK_FOOTER: "OTUS GHA BOT"
+
 
     # Push the Docker image to Google Container Registry
     - name: Publish
+
       run: |-
         docker push "gcr.io/$PROJECT_ID/$ENGINE_IMAGE:$GITHUB_SHA"
         docker push "gcr.io/$PROJECT_ID/$UI_IMAGE:$GITHUB_SHA"
+
+  deploy:
+
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+    needs:  ["setup-build-publish"]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - name: Configure Docker to use the gcloud command-line tool
+      run: |-
+        gcloud --quiet auth configure-docker
 
     # Get the GKE credentials so we can deploy to the cluster
     - name: Set up GKE credentials
       run: |-
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
-
-
     # Set up kustomize
     - name: Set up Kustomize
       working-directory: k8s/app-deployments
@@ -85,9 +127,6 @@ jobs:
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
         cp kustomize ../monitoring-deployments
-
-
-
 
      # Deploy the Docker image to the GKE cluster
     - name: Deploy to GKE  (application)
@@ -105,3 +144,26 @@ jobs:
         ./kustomize build . | kubectl apply -n monitoring -f -
         kubectl get services -o wide
         kubectl get services -o wide -n monitoring 
+
+
+
+    - name: Set env failure
+      if: ${{ failure() }}
+      run: 
+          echo ::set-env name=STEPVAR::'Деплой НЕ завершен '${{ job.status }} ' смотри логи' 
+
+    - name: Set env
+      if: ${{ success() }}
+      run: 
+          echo ::set-env name=STEPVAR::'Сборка завершена '${{ job.status }}   
+
+
+    - name: Slack Notification Build
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_USERNAME: "Бот сборочного конвеера" 
+        SLACK_TITLE: "Деплой завершен" 
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: ${{ env.STEPVAR }} 
+        SLACK_FOOTER: "OTUS GHA BOT"
