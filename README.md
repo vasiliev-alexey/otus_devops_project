@@ -35,11 +35,11 @@
      - [ ] Трейсинг (опционально)
      - [x] ChatOps (Git Hub Actions + Slack)
  - [ ] Документация
-     - [ ] README по работе с репозиторием
+     - [x] README по работе с репозиторием
          - [x] [Описание приложения](docs/application_schema.md) и его [архитектуры](docs/arch.md)
          - [x] CI/CD
              - [x] [Pipeline](.github)
                  - [x] Пример [рабочего флоу](.github/workflows/gke.yml)
-         - [ ] How to start?
-             - [ ] CI/CD Environment Variables
+         - [x] [How to start?](docs/how_to_run.md)
+             - [x] CI/CD Environment Variables
      - [x]  [CHANGELOG](docs/work_log.md) с описанием выполненной работы 
