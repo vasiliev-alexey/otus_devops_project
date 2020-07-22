@@ -44,5 +44,7 @@
              - [ ] CI/CD Environment Variables
      - [x]  [CHANGELOG](docs/work_log.md) с описанием выполненной работы 
      
-     [Скринкаст](https://yadi.sk/i/Wf_fMx75aqyz7A)
+     [Скринкаст от 12.07.2020](https://yadi.sk/i/Wf_fMx75aqyz7A)
+     [Скринкаст от 22.07.2020](https://yadi.sk/i/OsHjoYdND2-xTg)
+     
      
