@@ -160,6 +160,7 @@ jobs:
 
     - name: Slack Notification Build
       uses: rtCamp/action-slack-notify@master
+      if: ${{ always() }}
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: "Бот сборочного конвеера" 

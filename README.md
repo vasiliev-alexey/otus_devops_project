@@ -34,17 +34,18 @@
      - [x] Логирование (Fluentd + Loki + Grafana)
      - [ ] Трейсинг (опционально)
      - [x] ChatOps (Git Hub Actions + Slack)
- - [ ] Документация
-     - [ ] README по работе с репозиторием
-         - [x] [Описание приложения](docs/application_schema.md) и его [архитектуры](docs/arch.md)
+ - [x] Документация
+     - [x] README по работе с репозиторием
+        - [x] [Описание приложения](docs/application_schema.md) и его [архитектуры](docs/arch.md)
          - [x] CI/CD
              - [x] [Pipeline](.github)
                  - [x] Пример [рабочего флоу](.github/workflows/gke.yml)
-         - [ ] How to start?
-             - [ ] CI/CD Environment Variables
+         - [x] How to start?
+             - [x] CI/CD Environment Variables
      - [x]  [CHANGELOG](docs/work_log.md) с описанием выполненной работы 
      
      [Скринкаст от 12.07.2020](https://yadi.sk/i/Wf_fMx75aqyz7A)  
      [Скринкаст от 22.07.2020](https://yadi.sk/i/OsHjoYdND2-xTg)
      
      
+
